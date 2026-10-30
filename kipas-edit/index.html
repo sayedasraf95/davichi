@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ms" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1920">
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      :root {
+        --ground: #07090d;
+        --ground-2: #121722;
+        --ink: #f4f6fa;
+        --muted: #a9b3c4;
+        --air: #5ce1ff;
+        --cta: #ffd84d;
+        --deal: #ff3b5c;
+        --font-display: "Archivo Black", sans-serif;
+        --font-body: "Inter", sans-serif;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--ground);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        font-family: var(--font-body);
+        color: var(--ink);
+        background: radial-gradient(120% 70% at 50% 38%, var(--ground-2) 0%, var(--ground) 70%);
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+      }
+      .scene {
+        overflow: hidden;
+      }
+      /* Premium ambient light behind every product card */
+      .glow {
+        position: absolute;
+        left: 90px;
+        top: 360px;
+        width: 900px;
+        height: 900px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(92, 225, 255, 0.28) 0%, rgba(92, 225, 255, 0) 65%);
+      }
+      .head {
+        position: absolute;
+        left: 72px;
+        right: 72px;
+        top: 200px;
+        text-align: center;
+        font-family: var(--font-display);
+        font-size: 104px;
+        line-height: 0.98;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+      }
+      .head em {
+        font-style: normal;
+        color: var(--air);
+      }
+      .card {
+        position: absolute;
+        left: 90px;
+        top: 440px;
+        width: 900px;
+        height: 820px;
+        border-radius: 44px;
+        overflow: hidden;
+        background: #e9eef5;
+        box-shadow:
+          0 40px 120px rgba(0, 0, 0, 0.65),
+          0 0 0 2px rgba(255, 255, 255, 0.08);
+      }
+      .kb {
+        position: absolute;
+        inset: 0;
+      }
+      .kb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      /* Moving specular highlight: the "lighting" pass across the product */
+      .sheen {
+        position: absolute;
+        top: -20%;
+        left: -60%;
+        width: 40%;
+        height: 140%;
+        background: linear-gradient(
+          100deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.32) 50%,
+          rgba(255, 255, 255, 0) 100%
+        );
+        mix-blend-mode: soft-light;
+      }
+      .chip {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 1180px;
+        margin: 0 auto;
+        width: max-content;
+        padding: 26px 44px;
+        border-radius: 999px;
+        background: rgba(10, 13, 19, 0.88);
+        border: 2px solid rgba(92, 225, 255, 0.55);
+        font-size: 44px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .chip b {
+        color: var(--air);
+      }
+      .big-num {
+        font-family: var(--font-display);
+        font-size: 150px;
+        line-height: 1;
+        color: var(--air);
+      }
+      .unit {
+        font-family: var(--font-display);
+        font-size: 64px;
+        color: var(--ink);
+      }
+
+      /* ---------- Hook ---------- */
+      #hook-bg {
+        position: absolute;
+        inset: 0;
+      }
+      #hook-bg img {
+        position: absolute;
+        left: -180px;
+        top: 520px;
+        width: 1440px;
+        height: 1440px;
+        object-fit: cover;
+      }
+      #hook-shade {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(7, 9, 13, 0.98) 0%,
+          rgba(7, 9, 13, 0.94) 41%,
+          rgba(7, 9, 13, 0.15) 64%,
+          rgba(7, 9, 13, 0.55) 100%
+        );
+      }
+      #hook-l1,
+      #hook-l2 {
+        position: absolute;
+        left: 60px;
+        right: 60px;
+        text-align: center;
+        font-family: var(--font-display);
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+        line-height: 0.95;
+      }
+      #hook-l1 {
+        top: 200px;
+        font-size: 128px;
+      }
+      #hook-l2 {
+        top: 470px;
+        font-size: 96px;
+        color: var(--air);
+        text-shadow: 0 0 40px rgba(92, 225, 255, 0.55);
+      }
+      .streak {
+        position: absolute;
+        height: 6px;
+        border-radius: 6px;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(220, 248, 255, 0.95));
+      }
+      #flash {
+        position: absolute;
+        inset: 0;
+        background: #ffffff;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      /* ---------- Compact ---------- */
+      #measure {
+        position: absolute;
+        left: 150px;
+        top: 520px;
+        width: 8px;
+        height: 660px;
+        border-radius: 4px;
+        background: var(--air);
+        transform-origin: 50% 0%;
+      }
+
+      /* ---------- Details ---------- */
+      .pill {
+        position: absolute;
+        padding: 22px 36px;
+        border-radius: 999px;
+        background: var(--ink);
+        color: #0b0d12;
+        font-size: 42px;
+        font-weight: 900;
+        white-space: nowrap;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      }
+      .pill i {
+        font-style: normal;
+        color: #0089b8;
+      }
+
+      /* ---------- CTA ---------- */
+      #cta-card {
+        top: 400px;
+        height: 560px;
+      }
+      #cta-card img {
+        object-position: 50% 30%;
+      }
+      #price {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 985px;
+        text-align: center;
+      }
+      #price-now {
+        font-family: var(--font-display);
+        font-size: 170px;
+        line-height: 1;
+        color: var(--cta);
+      }
+      #price-now small {
+        font-size: 80px;
+      }
+      #price-was {
+        display: inline-block;
+        margin-top: 8px;
+        font-size: 48px;
+        font-weight: 700;
+        color: var(--muted);
+        text-decoration: line-through;
+      }
+      #badge {
+        position: absolute;
+        left: 770px;
+        top: 960px;
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: var(--deal);
+        font-family: var(--font-display);
+        font-size: 64px;
+        line-height: 200px;
+        text-align: center;
+        color: #fff;
+        box-shadow: 0 16px 50px rgba(255, 59, 92, 0.5);
+      }
+      #btn {
+        position: absolute;
+        left: 110px;
+        right: 110px;
+        top: 1270px;
+        height: 130px;
+        border-radius: 999px;
+        background: var(--cta);
+        color: #0b0d12;
+        font-family: var(--font-display);
+        font-size: 54px;
+        line-height: 130px;
+        text-align: center;
+        letter-spacing: -0.01em;
+        box-shadow: 0 0 60px rgba(255, 216, 77, 0.45);
+      }
+      #proof {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 330px;
+        text-align: center;
+        font-size: 40px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+      #proof b {
+        color: var(--cta);
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-fpqp" id="root" data-composition-id="main" data-start="0" data-duration="15.5" data-width="1080" data-height="1920">
+      <!-- 1. HOOK 0.0 - 2.4 -->
+      <div data-hf-id="hf-obvg" id="hook" class="clip scene" data-start="0" data-duration="2.4" data-track-index="0" data-track-kind="graphics">
+        <div data-hf-id="hf-qdn4" id="hook-bg"><img data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:0.75,&quot;adjust&quot;:{&quot;exposure&quot;:0.03,&quot;contrast&quot;:0.09,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.1,&quot;whites&quot;:0.02,&quot;blacks&quot;:-0.05,&quot;temperature&quot;:-0.02,&quot;tint&quot;:0,&quot;vibrance&quot;:0.05,&quot;saturation&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-jgic" id="hook-img" class="prod" src="assets/img/blast.jpg" alt="Kipas GFS007 meniup angin"></div>
+        <div data-hf-id="hf-jle4" id="hook-shade"></div>
+        <div data-hf-id="hf-ypxe" id="streaks">
+          <div data-hf-id="hf-se9l" class="streak" id="st1" style="top: 900px; left: -400px; width: 380px"></div>
+          <div data-hf-id="hf-a5mm" class="streak" id="st2" style="top: 1040px; left: -400px; width: 520px"></div>
+          <div data-hf-id="hf-ikxq" class="streak" id="st3" style="top: 1180px; left: -400px; width: 300px"></div>
+          <div data-hf-id="hf-kkz8" class="streak" id="st4" style="top: 1320px; left: -400px; width: 460px"></div>
+        </div>
+        <h1 data-hf-id="hf-eg8q" id="hook-l1">Kipas saiz<br data-hf-id="hf-x5px">telefon…</h1>
+        <h2 data-hf-id="hf-4jwr" id="hook-l2">Tapi angin<br data-hf-id="hf-rsrt">macam taufan</h2>
+        <div data-hf-id="hf-hmg5" id="flash"></div>
+      </div>
+
+      <!-- 2. COMPACT 2.4 - 4.6 -->
+      <div data-hf-id="hf-lzee" id="compact" class="clip scene" data-start="2.4" data-duration="2.2" data-track-index="0" data-track-kind="graphics">
+        <div data-hf-id="hf-2s7n" class="glow"></div>
+        <h2 data-hf-id="hf-q8k3" class="head" id="compact-head">Kecil <em data-hf-id="hf-zm7l">tapi padu</em></h2>
+        <div data-hf-id="hf-1316" class="card" id="compact-card">
+          <div data-hf-id="hf-oet2" class="kb" id="compact-kb"><img data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:0.75,&quot;adjust&quot;:{&quot;exposure&quot;:0.03,&quot;contrast&quot;:0.09,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.1,&quot;whites&quot;:0.02,&quot;blacks&quot;:-0.05,&quot;temperature&quot;:-0.02,&quot;tint&quot;:0,&quot;vibrance&quot;:0.05,&quot;saturation&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-so7o" class="prod" src="assets/img/compact.jpg" alt="Saiz kompak 125mm"></div>
+          <div data-hf-id="hf-ndf8" class="sheen" id="compact-sheen"></div>
+        </div>
+        <div data-hf-id="hf-ao1r" id="measure"></div>
+        <div data-hf-id="hf-j9e1" class="chip" id="compact-chip"><b data-hf-id="hf-43td">12.5 cm</b> · muat poket &amp; beg</div>
+      </div>
+
+      <!-- 3. MOTOR 4.6 - 6.8 -->
+      <div data-hf-id="hf-9ll2" id="motor" class="clip scene" data-start="4.6" data-duration="2.2" data-track-index="0" data-track-kind="graphics">
+        <div data-hf-id="hf-x5mb" class="glow"></div>
+        <div data-hf-id="hf-rqxq" class="head" id="motor-head"><span data-hf-id="hf-p36d" class="big-num" id="rpm">0</span> <span data-hf-id="hf-x4dc" class="unit">RPM</span></div>
+        <div data-hf-id="hf-pnum" class="card" id="motor-card">
+          <div data-hf-id="hf-3cj6" class="kb" id="motor-kb"><img data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:0.75,&quot;adjust&quot;:{&quot;exposure&quot;:0.03,&quot;contrast&quot;:0.09,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.1,&quot;whites&quot;:0.02,&quot;blacks&quot;:-0.05,&quot;temperature&quot;:-0.02,&quot;tint&quot;:0,&quot;vibrance&quot;:0.05,&quot;saturation&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-iiyu" class="prod" src="assets/img/motor.jpg" alt="Motor brushless"></div>
+          <div data-hf-id="hf-c3u8" class="sheen" id="motor-sheen"></div>
+        </div>
+        <div data-hf-id="hf-ueup" class="chip" id="motor-chip">Motor <b data-hf-id="hf-j44m">brushless</b> · laju &amp; jimat</div>
+      </div>
+
+      <!-- 4. LED / SPEED 6.8 - 9.0 -->
+      <div data-hf-id="hf-cdzu" id="led" class="clip scene" data-start="6.8" data-duration="2.2" data-track-index="0" data-track-kind="graphics">
+        <div data-hf-id="hf-wrba" class="glow"></div>
+        <div data-hf-id="hf-kiqi" class="head" id="led-head"><span data-hf-id="hf-y9oh" class="big-num" id="lvl">1</span> <span data-hf-id="hf-l3b9" class="unit">tahap laju</span></div>
+        <div data-hf-id="hf-6ldm" class="card" id="led-card">
+          <div data-hf-id="hf-xzlq" class="kb" id="led-kb"><img data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:0.75,&quot;adjust&quot;:{&quot;exposure&quot;:0.03,&quot;contrast&quot;:0.09,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.1,&quot;whites&quot;:0.02,&quot;blacks&quot;:-0.05,&quot;temperature&quot;:-0.02,&quot;tint&quot;:0,&quot;vibrance&quot;:0.05,&quot;saturation&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-ia2a" class="prod" src="assets/img/led.jpg" alt="Paparan LED"></div>
+          <div data-hf-id="hf-no0c" class="sheen" id="led-sheen"></div>
+        </div>
+        <div data-hf-id="hf-1l3z" class="chip" id="led-chip">Paparan <b data-hf-id="hf-d022">LED</b> · nampak bateri</div>
+      </div>
+
+      <!-- 5. DETAILS 9.0 - 11.4 -->
+      <div data-hf-id="hf-dy3i" id="details" class="clip scene" data-start="9.0" data-duration="2.4" data-track-index="0" data-track-kind="graphics" data-layout-allow-overlap="">
+        <div data-hf-id="hf-wd09" class="glow"></div>
+        <h2 data-hf-id="hf-i62z" class="head" id="details-head">Detail <em data-hf-id="hf-ui4g">premium</em></h2>
+        <div data-hf-id="hf-v975" class="card" id="details-card">
+          <div data-hf-id="hf-e85p" class="kb" id="details-kb"><img data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:0.75,&quot;adjust&quot;:{&quot;exposure&quot;:0.03,&quot;contrast&quot;:0.09,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.1,&quot;whites&quot;:0.02,&quot;blacks&quot;:-0.05,&quot;temperature&quot;:-0.02,&quot;tint&quot;:0,&quot;vibrance&quot;:0.05,&quot;saturation&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-1pms" class="prod" src="assets/img/details.jpg" alt="Butang metal, Type-C, lanyard"></div>
+          <div data-hf-id="hf-zpy1" class="sheen" id="details-sheen"></div>
+        </div>
+        <div data-hf-id="hf-ofaf" class="pill" id="p1" style="left: 120px; top: 560px"><i data-hf-id="hf-9mo9">●</i> Butang metal</div>
+        <div data-hf-id="hf-ixds" class="pill" id="p2" style="left: 470px; top: 840px"><i data-hf-id="hf-j4e5">●</i> Port Type-C</div>
+        <div data-hf-id="hf-6mdd" class="pill" id="p3" style="left: 150px; top: 1120px"><i data-hf-id="hf-odac">●</i> Lubang lanyard</div>
+      </div>
+
+      <!-- 6. CTA 11.4 - 15.5 -->
+      <div data-hf-id="hf-rsu4" id="cta" class="clip scene" data-start="11.4" data-duration="4.1" data-track-index="0" data-track-kind="graphics" data-layout-allow-overlap="">
+        <div data-hf-id="hf-90an" class="glow" style="top: 300px"></div>
+        <h2 data-hf-id="hf-4n0y" class="head" id="cta-head" style="top: 190px; font-size: 92px">Nak satu?</h2>
+        <div data-hf-id="hf-7ux5" id="proof"><b data-hf-id="hf-zubn">★ 6.3K+</b> review positif</div>
+        <div data-hf-id="hf-vq0d" class="card" id="cta-card">
+          <div data-hf-id="hf-33a9" class="kb" id="cta-kb"><img data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:0.75,&quot;adjust&quot;:{&quot;exposure&quot;:0.03,&quot;contrast&quot;:0.09,&quot;highlights&quot;:-0.14,&quot;shadows&quot;:0.1,&quot;whites&quot;:0.02,&quot;blacks&quot;:-0.05,&quot;temperature&quot;:-0.02,&quot;tint&quot;:0,&quot;vibrance&quot;:0.05,&quot;saturation&quot;:0.03},&quot;details&quot;:{&quot;vignette&quot;:0,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-wwrh" class="prod" src="assets/img/hero.jpg" alt="4 warna GFS007"></div>
+          <div data-hf-id="hf-0kjh" class="sheen" id="cta-sheen"></div>
+        </div>
+        <div data-hf-id="hf-z9n4" id="price">
+          <div data-hf-id="hf-7dd5" id="price-now"><small data-hf-id="hf-7agt">RM</small>33</div>
+          <div data-hf-id="hf-3cmd" id="price-was">RM80.00</div>
+        </div>
+        <div data-hf-id="hf-w46f" id="badge">-58%</div>
+        <div data-hf-id="hf-345d" id="btn">Tekan beg kuning 🛒</div>
+      </div>
+
+      <!-- SOUND: bundled HyperFrames SFX, each placed on a visible action -->
+      <audio data-hf-id="hf-klzb" id="sfx-impact" class="clip" src="assets/sfx/impact-bass-1.mp3" data-start="0.62" data-duration="2" data-volume="0.9"></audio>
+      <audio data-hf-id="hf-jii2" id="sfx-air" class="clip" src="assets/sfx/whoosh-cinematic.mp3" data-start="0" data-duration="2.4" data-volume="0.45" data-fade-out="0.4"></audio>
+      <audio data-hf-id="hf-3pbj" id="sfx-w1" class="clip" src="assets/sfx/whoosh.mp3" data-start="2.25" data-duration="0.58" data-volume="0.7"></audio>
+      <audio data-hf-id="hf-fm32" id="sfx-pop1" class="clip" src="assets/sfx/pop.mp3" data-start="2.86" data-duration="0.7" data-volume="0.55"></audio>
+      <audio data-hf-id="hf-96z9" id="sfx-w2" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="4.45" data-duration="0.58" data-volume="0.7"></audio>
+      <audio data-hf-id="hf-37wd" id="sfx-w3" class="clip" src="assets/sfx/whoosh.mp3" data-start="6.65" data-duration="0.58" data-volume="0.7"></audio>
+      <audio data-hf-id="hf-jw47" id="sfx-w4" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="8.85" data-duration="0.58" data-volume="0.7"></audio>
+      <audio data-hf-id="hf-1vz5" id="sfx-pop2" class="clip" src="assets/sfx/pop.mp3" data-start="9.55" data-duration="0.7" data-volume="0.5"></audio>
+      <audio data-hf-id="hf-rio6" id="sfx-pop3" class="clip" src="assets/sfx/pop.mp3" data-start="9.8" data-duration="0.7" data-volume="0.5"></audio>
+      <audio data-hf-id="hf-waj4" id="sfx-pop4" class="clip" src="assets/sfx/pop.mp3" data-start="10.05" data-duration="0.7" data-volume="0.5"></audio>
+      <audio data-hf-id="hf-8new" id="sfx-riser" class="clip" src="assets/sfx/riser.mp3" data-start="10.25" data-duration="1.8" data-media-start="2.2" data-volume="0.5"></audio>
+      <audio data-hf-id="hf-r6b5" id="sfx-hit" class="clip" src="assets/sfx/impact-bass-1.mp3" data-start="12.05" data-duration="2" data-volume="0.8"></audio>
+      <audio data-hf-id="hf-1bpl" id="sfx-spark" class="clip" src="assets/sfx/sparkle.mp3" data-start="12.45" data-duration="1.8" data-volume="0.45"></audio>
+      <audio data-hf-id="hf-root" id="sfx-click" class="clip" src="assets/sfx/click-soft.mp3" data-start="13.3" data-duration="0.37" data-volume="0.7"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // ---------- 1. HOOK ----------
+      // Frame 0 already shows line 1 (thumbnail = hook). Slow push on the product.
+      tl.fromTo("#hook-img", { scale: 1.05, x: 0 }, { scale: 1.28, x: -60, duration: 2.4, ease: "none" }, 0);
+      tl.fromTo("#hook-l1", { scale: 1.12, opacity: 1 }, { scale: 1, duration: 0.35, ease: "power4.out" }, 0);
+      // Airflow streaks
+      ["#st1", "#st2", "#st3", "#st4"].forEach((s, i) => {
+        tl.set(s, { x: 0 }, 0);
+        tl.to(s, { x: 1700, duration: 0.55, ease: "power2.in" }, 0.15 + i * 0.12);
+        tl.set(s, { x: 0 }, 0.9);
+        tl.to(s, { x: 1700, duration: 0.5, ease: "power2.in" }, 0.95 + i * 0.1);
+      });
+      // Line 2 slams in with flash + camera shake
+      tl.fromTo("#hook-l2", { scale: 2.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.18, ease: "power4.in" }, 0.55);
+      tl.set("#flash", { opacity: 0.55 }, 0.73);
+      tl.to("#flash", { opacity: 0, duration: 0.3, ease: "power2.out" }, 0.73);
+      tl.to("#hook", { keyframes: { x: [0, -18, 14, -9, 6, 0], y: [0, 10, -8, 5, -3, 0] }, duration: 0.32, ease: "none" }, 0.73);
+      // Whip out
+      tl.to("#hook-bg", { x: -1080, duration: 0.22, ease: "power3.in" }, 2.16);
+      tl.to(["#hook-l1", "#hook-l2"], { x: -1080, duration: 0.22, ease: "power3.in" }, 2.16);
+
+      // Shared beat for card scenes: whip in, Ken Burns, sheen, chip pop, whip out
+      function cardScene(id, t0, dur) {
+        tl.fromTo(`#${id}-card`, { x: 1080 }, { x: 0, duration: 0.24, ease: "power3.out" }, t0);
+        tl.fromTo(`#${id}-head`, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, t0 + 0.08);
+        tl.fromTo(`#${id}-kb`, { scale: 1.0 }, { scale: 1.1, duration: dur, ease: "none" }, t0);
+        tl.fromTo(`#${id}-sheen`, { x: 0 }, { x: 1700, duration: 0.9, ease: "power2.inOut" }, t0 + 0.4);
+        tl.fromTo(`#${id}-chip`, { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.2)" }, t0 + 0.45);
+        tl.to(`#${id}`, { x: -1080, duration: 0.2, ease: "power3.in" }, t0 + dur - 0.2);
+      }
+
+      // ---------- 2. COMPACT ----------
+      cardScene("compact", 2.4, 2.2);
+      tl.fromTo("#measure", { scaleY: 0 }, { scaleY: 1, duration: 0.5, ease: "power2.out" }, 2.75);
+
+      // ---------- 3. MOTOR: RPM counter ----------
+      cardScene("motor", 4.6, 2.2);
+      const rpm = { v: 0 };
+      tl.to(rpm, {
+        v: 20000,
+        duration: 0.9,
+        ease: "power3.out",
+        onUpdate: () => (document.getElementById("rpm").textContent = Math.round(rpm.v).toLocaleString("en-US")),
+      }, 4.7);
+
+      // ---------- 4. LED: speed level counter ----------
+      cardScene("led", 6.8, 2.2);
+      const lvl = { v: 1 };
+      tl.to(lvl, {
+        v: 100,
+        duration: 0.9,
+        ease: "power2.out",
+        onUpdate: () => (document.getElementById("lvl").textContent = Math.round(lvl.v)),
+      }, 6.9);
+
+      // ---------- 5. DETAILS: callout pills ----------
+      tl.fromTo("#details-card", { x: 1080 }, { x: 0, duration: 0.24, ease: "power3.out" }, 9.0);
+      tl.fromTo("#details-head", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.3, ease: "power3.out" }, 9.08);
+      tl.fromTo("#details-kb", { scale: 1.0, y: 0 }, { scale: 1.12, y: -40, duration: 2.4, ease: "none" }, 9.0);
+      tl.fromTo("#details-sheen", { x: 0 }, { x: 1700, duration: 0.9, ease: "power2.inOut" }, 9.3);
+      ["#p1", "#p2", "#p3"].forEach((p, i) => {
+        tl.fromTo(p, { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.4)" }, 9.5 + i * 0.25);
+      });
+      tl.to("#details", { scale: 1.25, opacity: 0, duration: 0.25, ease: "power3.in" }, 11.15);
+
+      // ---------- 6. CTA ----------
+      tl.fromTo("#cta-head", { scale: 1.3, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "power4.out" }, 11.4);
+      tl.fromTo("#proof", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 11.6);
+      tl.fromTo("#cta-card", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power3.out" }, 11.45);
+      tl.fromTo("#cta-kb", { scale: 1.0 }, { scale: 1.08, duration: 4.1, ease: "none" }, 11.4);
+      tl.fromTo("#cta-sheen", { x: 0 }, { x: 1700, duration: 1.0, ease: "power2.inOut" }, 11.9);
+      tl.fromTo("#price", { scale: 1.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "power4.in" }, 11.85);
+      tl.to("#cta", { keyframes: { x: [0, -12, 10, -6, 0], y: [0, 8, -6, 3, 0] }, duration: 0.26, ease: "none" }, 12.07);
+      tl.fromTo("#badge", { scale: 0, rotation: -40 }, { scale: 1, rotation: -8, duration: 0.4, ease: "back.out(2.6)" }, 12.4);
+      tl.fromTo("#btn", { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "power3.out" }, 12.9);
+      // Button pulse (finite)
+      [13.3, 14.0, 14.7].forEach((t) => {
+        tl.to("#btn", { scale: 1.07, duration: 0.15, ease: "power2.out" }, t);
+        tl.to("#btn", { scale: 1, duration: 0.3, ease: "power2.inOut" }, t + 0.15);
+      });
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
