@@ -1,0 +1,845 @@
+{
+  "ok": false,
+  "strict": false,
+  "browserSkipped": false,
+  "lint": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 11,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "gsap_repeated_fromto_without_baseline",
+        "severity": "warning",
+        "message": "2 tl.fromTo() calls target \"#st1\" with no stable baseline. The last-authored fromTo \"from\" values become the element's resting state for any seek before the first tween actually runs, because GSAP applies fromTo from-values at authoring time (immediateRender), not at tween position.",
+        "selector": "#st1",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/davichi/kipas-edit/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add `immediateRender: false` to every fromTo except the earliest-positioned one (at 0.15s), so pre-first-tween seeks keep its \"from\" values. A hiding `tl.set(..., 0)` baseline trips gsap_timeline_set_initial_hide, and a `gsap.set` authored before the fromTo calls is overwritten by them."
+      },
+      {
+        "code": "gsap_repeated_fromto_without_baseline",
+        "severity": "warning",
+        "message": "2 tl.fromTo() calls target \"#st2\" with no stable baseline. The last-authored fromTo \"from\" values become the element's resting state for any seek before the first tween actually runs, because GSAP applies fromTo from-values at authoring time (immediateRender), not at tween position.",
+        "selector": "#st2",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/davichi/kipas-edit/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add `immediateRender: false` to every fromTo except the earliest-positioned one (at 0.27s), so pre-first-tween seeks keep its \"from\" values. A hiding `tl.set(..., 0)` baseline trips gsap_timeline_set_initial_hide, and a `gsap.set` authored before the fromTo calls is overwritten by them."
+      },
+      {
+        "code": "gsap_repeated_fromto_without_baseline",
+        "severity": "warning",
+        "message": "2 tl.fromTo() calls target \"#st3\" with no stable baseline. The last-authored fromTo \"from\" values become the element's resting state for any seek before the first tween actually runs, because GSAP applies fromTo from-values at authoring time (immediateRender), not at tween position.",
+        "selector": "#st3",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/davichi/kipas-edit/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add `immediateRender: false` to every fromTo except the earliest-positioned one (at 0.39s), so pre-first-tween seeks keep its \"from\" values. A hiding `tl.set(..., 0)` baseline trips gsap_timeline_set_initial_hide, and a `gsap.set` authored before the fromTo calls is overwritten by them."
+      },
+      {
+        "code": "gsap_repeated_fromto_without_baseline",
+        "severity": "warning",
+        "message": "2 tl.fromTo() calls target \"#st4\" with no stable baseline. The last-authored fromTo \"from\" values become the element's resting state for any seek before the first tween actually runs, because GSAP applies fromTo from-values at authoring time (immediateRender), not at tween position.",
+        "selector": "#st4",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/davichi/kipas-edit/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add `immediateRender: false` to every fromTo except the earliest-positioned one (at 0.51s), so pre-first-tween seeks keep its \"from\" values. A hiding `tl.set(..., 0)` baseline trips gsap_timeline_set_initial_hide, and a `gsap.set` authored before the fromTo calls is overwritten by them."
+      },
+      {
+        "code": "timeline_track_too_dense",
+        "severity": "warning",
+        "message": "Track 0 has 6 timed elements in this HTML file. Smaller sub-compositions keep timelines easier to read, iterate on, and diff.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/davichi/kipas-edit/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Move coherent scene groups into separate .html files under compositions/ and mount them from the parent with data-composition-src so the timeline stays easier to inspect, revise, and validate."
+      },
+      {
+        "code": "nested_structure_needs_subcomposition",
+        "severity": "warning",
+        "message": "<div id=\"hook\"> is a timeline element that contains nested <div id=\"hook-bg\">. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+        "selector": "#hook",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/davichi/kipas-edit/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Move <div id=\"hook\"> and its contents into a sub-composition file and mount it with data-composition-src."
+      },
+      {
+        "code": "nested_structure_needs_subcomposition",
+        "severity": "warning",
+        "message": "<div id=\"compact\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+        "selector": "#compact",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/davichi/kipas-edit/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Move <div id=\"compact\"> and its contents into a sub-composition file and mount it with data-composition-src."
+      },
+      {
+        "code": "nested_structure_needs_subcomposition",
+        "severity": "warning",
+        "message": "<div id=\"motor\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+        "selector": "#motor",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/davichi/kipas-edit/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Move <div id=\"motor\"> and its contents into a sub-composition file and mount it with data-composition-src."
+      },
+      {
+        "code": "nested_structure_needs_subcomposition",
+        "severity": "warning",
+        "message": "<div id=\"led\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+        "selector": "#led",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/davichi/kipas-edit/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Move <div id=\"led\"> and its contents into a sub-composition file and mount it with data-composition-src."
+      },
+      {
+        "code": "nested_structure_needs_subcomposition",
+        "severity": "warning",
+        "message": "<div id=\"details\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+        "selector": "#details",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/davichi/kipas-edit/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Move <div id=\"details\"> and its contents into a sub-composition file and mount it with data-composition-src."
+      },
+      {
+        "code": "nested_structure_needs_subcomposition",
+        "severity": "warning",
+        "message": "<div id=\"cta\"> is a timeline element that contains nested <div>. The timeline shows one row per top-level element, and the root composition is built only from sub-compositions.",
+        "selector": "#cta",
+        "dataAttributes": {},
+        "sourceFile": "/home/user/davichi/kipas-edit/index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Move <div id=\"cta\"> and its contents into a sub-composition file and mount it with data-composition-src."
+      }
+    ],
+    "filesScanned": 1
+  },
+  "runtime": {
+    "ok": false,
+    "errorCount": 2,
+    "warningCount": 6,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "request_failed",
+        "severity": "error",
+        "message": "Failed to load npm/gsap@3.14.2/dist/gsap.min.js: net::ERR_TUNNEL_CONNECTION_FAILED",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-hf-id": "hf-fpqp",
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "15.5",
+          "data-width": "1080",
+          "data-height": "1920"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 0,
+        "url": "https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"
+      },
+      {
+        "code": "page_error",
+        "severity": "error",
+        "message": "Cannot read properties of undefined (reading 'timeline')",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-hf-id": "hf-fpqp",
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "15.5",
+          "data-width": "1080",
+          "data-height": "1920"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 0
+      },
+      {
+        "code": "console_warning",
+        "severity": "warning",
+        "message": "[.WebGL-0x1b940019b800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-hf-id": "hf-fpqp",
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "15.5",
+          "data-width": "1080",
+          "data-height": "1920"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:46043/"
+      },
+      {
+        "code": "console_warning",
+        "severity": "warning",
+        "message": "[.WebGL-0x1b940019b800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-hf-id": "hf-fpqp",
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "15.5",
+          "data-width": "1080",
+          "data-height": "1920"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 0,
+        "url": "http://127.0.0.1:46043/"
+      },
+      {
+        "code": "console_warning",
+        "severity": "warning",
+        "message": "[.WebGL-0x1b940019b800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-hf-id": "hf-fpqp",
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "15.5",
+          "data-width": "1080",
+          "data-height": "1920"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 0.861,
+        "url": "http://127.0.0.1:46043/"
+      },
+      {
+        "code": "console_warning",
+        "severity": "warning",
+        "message": "[.WebGL-0xbf40018b800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-hf-id": "hf-fpqp",
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "15.5",
+          "data-width": "1080",
+          "data-height": "1920"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 2.583,
+        "url": "http://127.0.0.1:46043/"
+      },
+      {
+        "code": "console_warning",
+        "severity": "warning",
+        "message": "[.WebGL-0xbf40018b800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-hf-id": "hf-fpqp",
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "15.5",
+          "data-width": "1080",
+          "data-height": "1920"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 2.583,
+        "url": "http://127.0.0.1:46043/"
+      },
+      {
+        "code": "console_warning",
+        "severity": "warning",
+        "message": "[.WebGL-0x1b940019b800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-hf-id": "hf-fpqp",
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "15.5",
+          "data-width": "1080",
+          "data-height": "1920"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1080,
+          "height": 1920
+        },
+        "time": 4.306,
+        "url": "http://127.0.0.1:46043/"
+      }
+    ]
+  },
+  "layout": {
+    "ok": false,
+    "errorCount": 1,
+    "warningCount": 3,
+    "infoCount": 4,
+    "findings": [
+      {
+        "code": "text_occluded",
+        "severity": "error",
+        "time": 12.917,
+        "selector": "#price-was",
+        "message": "Text is hidden beneath an opaque element.",
+        "rect": {
+          "left": 431.09,
+          "top": 1178,
+          "right": 648.91,
+          "bottom": 1237,
+          "width": 217.81,
+          "height": 59
+        },
+        "containerSelector": "#btn",
+        "text": "RM80.00",
+        "fixHint": "Give the text its own zone, raise its stacking order above the covering element, or mark intentional layering with data-layout-allow-occlusion.",
+        "coveredFraction": 0.33,
+        "lifetime": {
+          "start": 11.4,
+          "end": 15.5
+        },
+        "dataAttributes": {
+          "data-hf-id": "hf-3cmd"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 431.09,
+          "y": 1178,
+          "width": 217.81,
+          "height": 59
+        },
+        "firstSeen": 12.917,
+        "lastSeen": 14.639,
+        "occurrences": 2,
+        "heldMs": 0,
+        "times": [
+          12.917,
+          14.639
+        ]
+      },
+      {
+        "code": "container_overflow",
+        "severity": "warning",
+        "time": 2.583,
+        "selector": "#compact-sheen",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": -450,
+          "top": 276,
+          "right": -90,
+          "bottom": 1424,
+          "width": 360,
+          "height": 1148
+        },
+        "containerSelector": "#compact-card",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 90,
+          "top": 440,
+          "right": 990,
+          "bottom": 1260,
+          "width": 900,
+          "height": 820
+        },
+        "overflow": {
+          "left": 540,
+          "top": 164,
+          "bottom": 164
+        },
+        "dataAttributes": {
+          "data-hf-id": "hf-ndf8"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": -450,
+          "y": 276,
+          "width": 360,
+          "height": 1148
+        },
+        "firstSeen": 2.583,
+        "lastSeen": 4.306,
+        "occurrences": 2,
+        "heldMs": 0,
+        "times": [
+          2.583,
+          4.306
+        ]
+      },
+      {
+        "code": "container_overflow",
+        "severity": "warning",
+        "time": 9.472,
+        "selector": "#details-sheen",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": -450,
+          "top": 276,
+          "right": -90,
+          "bottom": 1424,
+          "width": 360,
+          "height": 1148
+        },
+        "containerSelector": "#details-card",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 90,
+          "top": 440,
+          "right": 990,
+          "bottom": 1260,
+          "width": 900,
+          "height": 820
+        },
+        "overflow": {
+          "left": 540,
+          "top": 164,
+          "bottom": 164
+        },
+        "dataAttributes": {
+          "data-hf-id": "hf-zpy1"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": -450,
+          "y": 276,
+          "width": 360,
+          "height": 1148
+        },
+        "firstSeen": 9.472,
+        "lastSeen": 11.194,
+        "occurrences": 2,
+        "heldMs": 0,
+        "times": [
+          9.472,
+          11.194
+        ]
+      },
+      {
+        "code": "container_overflow",
+        "severity": "warning",
+        "time": 12.917,
+        "selector": "#cta-sheen",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": -450,
+          "top": 288,
+          "right": -90,
+          "bottom": 1072,
+          "width": 360,
+          "height": 784
+        },
+        "containerSelector": "#cta-card",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 90,
+          "top": 400,
+          "right": 990,
+          "bottom": 960,
+          "width": 900,
+          "height": 560
+        },
+        "overflow": {
+          "left": 540,
+          "top": 112,
+          "bottom": 112
+        },
+        "dataAttributes": {
+          "data-hf-id": "hf-0kjh"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": -450,
+          "y": 288,
+          "width": 360,
+          "height": 784
+        },
+        "firstSeen": 12.917,
+        "lastSeen": 14.639,
+        "occurrences": 2,
+        "heldMs": 0,
+        "times": [
+          12.917,
+          14.639
+        ]
+      },
+      {
+        "code": "escaped_container",
+        "severity": "info",
+        "time": 0.861,
+        "selector": "#st2",
+        "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
+        "rect": {
+          "left": -400,
+          "top": 1040,
+          "right": 120,
+          "bottom": 1046,
+          "width": 520,
+          "height": 6
+        },
+        "containerSelector": "#hook",
+        "text": "",
+        "fixHint": "Compute left/top in the offset parent's frame (subtract its rect), or mark intentional placement with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1080,
+          "bottom": 1920,
+          "width": 1080,
+          "height": 1920
+        },
+        "dataAttributes": {
+          "data-hf-id": "hf-a5mm"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": -400,
+          "y": 1040,
+          "width": 520,
+          "height": 6
+        },
+        "firstSeen": 0.861,
+        "lastSeen": 0.861,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          0.861
+        ]
+      },
+      {
+        "code": "escaped_container",
+        "severity": "info",
+        "time": 0.861,
+        "selector": "#st4",
+        "message": "Positioned element renders far outside its offset parent — its coordinates were likely computed in a different frame (canvas/viewport pixels).",
+        "rect": {
+          "left": -400,
+          "top": 1320,
+          "right": 60,
+          "bottom": 1326,
+          "width": 460,
+          "height": 6
+        },
+        "containerSelector": "#hook",
+        "text": "",
+        "fixHint": "Compute left/top in the offset parent's frame (subtract its rect), or mark intentional placement with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1080,
+          "bottom": 1920,
+          "width": 1080,
+          "height": 1920
+        },
+        "dataAttributes": {
+          "data-hf-id": "hf-kkz8"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": -400,
+          "y": 1320,
+          "width": 460,
+          "height": 6
+        },
+        "firstSeen": 0.861,
+        "lastSeen": 0.861,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          0.861
+        ]
+      },
+      {
+        "code": "container_overflow",
+        "severity": "info",
+        "time": 6.028,
+        "selector": "#motor-sheen",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": -450,
+          "top": 276,
+          "right": -90,
+          "bottom": 1424,
+          "width": 360,
+          "height": 1148
+        },
+        "containerSelector": "#motor-card",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 90,
+          "top": 440,
+          "right": 990,
+          "bottom": 1260,
+          "width": 900,
+          "height": 820
+        },
+        "overflow": {
+          "left": 540,
+          "top": 164,
+          "bottom": 164
+        },
+        "dataAttributes": {
+          "data-hf-id": "hf-c3u8"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": -450,
+          "y": 276,
+          "width": 360,
+          "height": 1148
+        },
+        "firstSeen": 6.028,
+        "lastSeen": 6.028,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          6.028
+        ]
+      },
+      {
+        "code": "container_overflow",
+        "severity": "info",
+        "time": 7.75,
+        "selector": "#led-sheen",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": -450,
+          "top": 276,
+          "right": -90,
+          "bottom": 1424,
+          "width": 360,
+          "height": 1148
+        },
+        "containerSelector": "#led-card",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 90,
+          "top": 440,
+          "right": 990,
+          "bottom": 1260,
+          "width": 900,
+          "height": 820
+        },
+        "overflow": {
+          "left": 540,
+          "top": 164,
+          "bottom": 164
+        },
+        "dataAttributes": {
+          "data-hf-id": "hf-no0c"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": -450,
+          "y": 276,
+          "width": 360,
+          "height": 1148
+        },
+        "firstSeen": 7.75,
+        "lastSeen": 7.75,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          7.75
+        ]
+      }
+    ],
+    "duration": 15.5,
+    "samples": [
+      0.861,
+      2.583,
+      4.306,
+      6.028,
+      7.75,
+      9.472,
+      11.194,
+      12.917,
+      14.639
+    ],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 8,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "samples": [
+      0.861,
+      4.306,
+      7.75,
+      11.194,
+      14.639
+    ],
+    "checked": 25,
+    "passed": 25
+  },
+  "craft": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "step": 0.125,
+    "samples": 124
+  },
+  "audio": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 1,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "audio_clip_silent",
+        "severity": "warning",
+        "message": "assets/sfx/riser.mp3 is silent for the whole part this clip plays (8.4-9.8 s of the file).",
+        "selector": "#sfx-riser",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 10.2,
+        "timeRange": [
+          10.2,
+          11.6
+        ],
+        "fixHint": "Check the file has sound there, or move data-media-start to where it does."
+      }
+    ]
+  },
+  "hdr": {
+    "autoPromotion": null,
+    "inspection": "available"
+  },
+  "snapshots": {
+    "enabled": false,
+    "files": [],
+    "times": [],
+    "findingFiles": []
+  }
+}
