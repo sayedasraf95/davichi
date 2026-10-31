@@ -2,3 +2,10 @@ node_modules/
 kipas-edit/snapshots/
 kipas-edit/.media/
 kipas-edit/renders/
+kedai-edit/snapshots/
+kedai-edit/.media/
+kedai-edit/renders/
+kedai-edit/assets/original.mp4
+kedai-edit/.hyperframes/artifacts/
+kedai-edit/.hyperframes/video-state.json
+kedai-edit/PREVIEW-draft.mp4
